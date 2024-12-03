@@ -14,7 +14,7 @@ internal class Program
         var megaline = string.Concat(lines);
 
         megaline = PrepareMegaline(megaline);
-        
+
         var regex = new Regex(@"mul\((\d+),\s*(\d+)\)");
         MatchCollection matches = regex.Matches(megaline);
 
@@ -36,21 +36,16 @@ internal class Program
         const string doString = "do()";
         const string dontString = "don't()";
 
-        var dontCounter = 0;
-        var doCounter = 0;
         while (megaline.Contains(dontString))
         {
-            dontCounter++;
             var dontIndex = megaline.IndexOf(dontString, StringComparison.Ordinal);
             var nextDoIndex = megaline.IndexOf(doString, dontIndex, StringComparison.Ordinal);
             if (nextDoIndex == -1)
-                nextDoIndex = megaline.Length-1;
-            else
-                doCounter++;
-            megaline = megaline.Remove(dontIndex, nextDoIndex - dontIndex);
+                nextDoIndex = megaline.Length - 1;
 
+            megaline = megaline.Remove(dontIndex, nextDoIndex - dontIndex);
         }
-        
+
         return megaline;
     }
 }
