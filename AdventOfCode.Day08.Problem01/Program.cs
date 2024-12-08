@@ -8,6 +8,40 @@ namespace AdventOfCode.Day08.Problem01;
 
 internal class Program
 {
+    private static HashSet<Point> Marks = new HashSet<Point>();
+
+    private static char[] GetAllAntennaTypes(char[,] map)
+    {
+        var antennaTypes = new HashSet<char>();
+        for (int x = 0; x < map.GetLength(0); x++)
+        {
+            for (int y = 0; y < map.GetLength(1); y++)
+            {
+                var c = map[x, y];
+                if (c != '#' && c != ' ' && c != '.')
+                    antennaTypes.Add(c);
+            }
+        }
+
+        return antennaTypes.ToArray();
+    }
+
+    private static Point[] GetAntennas(char antennaType, char[,] map)
+    {
+        var antennas = new List<Point>();
+        for (int x = 0; x < map.GetLength(0); x++)
+        {
+            for (int y = 0; y < map.GetLength(1); y++)
+            {
+                var c = map[x, y];
+                if (c == antennaType)
+                    antennas.Add(new Point(x, y));
+            }
+        }
+
+        return antennas.ToArray();
+    }
+
     private static void Main()
     {
         const string fileName = "day08.txt";
@@ -37,16 +71,19 @@ internal class Program
         Console.WriteLine(Marks.Count);
     }
 
-    private static int GetMarksCount(char[,] map)
+    private static void MarkAntennaZone(Point a, Point b, char[,] map)
     {
-        var count = 0;
-        foreach (var c in map)
-        {
-            if (c == '#')
-                count++;
-        }
+        var x = a.X + (b.X - a.X) * 2;
+        var y = a.Y + (b.Y - a.Y) * 2;
 
-        return count;
+        if (x < 0 || x >= map.GetLength(0)
+            || y < 0 || y >= map.GetLength(1))
+            return;
+
+        Marks.Add(new Point(x, y));
+
+        if (map[x, y] == ' ')
+            map[x, y] = '#';
     }
 
     private static void MarkAntennaZones(char antennaType, char[,] map)
@@ -73,60 +110,9 @@ internal class Program
         {
             for (int x = 0; x < map.GetLength(0); x++)
             {
-                Console.Write(map[x,y]);
+                Console.Write(map[x, y]);
             }
             Console.WriteLine();
         }
-    }
-
-    private static HashSet<Point> Marks = new HashSet<Point>();
-
-    private static void MarkAntennaZone(Point a, Point b, char[,] map)
-    {
-        var x = a.X + (b.X - a.X) * 2;
-        var y = a.Y + (b.Y - a.Y) * 2;
-
-        if (x < 0 || x >= map.GetLength(0)
-            || y < 0 || y >= map.GetLength(1))
-            return;
-
-        Marks.Add(new Point(x, y));
-
-        if (map[x, y] == ' ')
-            map[x, y] = '#';
-    }
-
-    
-
-    private static Point[] GetAntennas(char antennaType, char[,] map)
-    {
-        var antennas = new List<Point>();
-        for (int x = 0; x < map.GetLength(0); x++)
-        {
-            for (int y = 0; y < map.GetLength(1); y++)
-            {
-                var c = map[x, y];
-                if (c == antennaType)
-                    antennas.Add(new Point(x, y));
-            }
-        }
-
-        return antennas.ToArray();
-    }
-
-    private static char[] GetAllAntennaTypes(char[,] map)
-    {
-        var antennaTypes = new HashSet<char>();
-        for (int x = 0; x < map.GetLength(0); x++)
-        {
-            for (int y = 0; y < map.GetLength(1); y++)
-            {
-                var c = map[x, y];
-                if (c != '#' && c != ' ' && c != '.')
-                    antennaTypes.Add(c);
-            }
-        }
-
-        return antennaTypes.ToArray();
     }
 }
