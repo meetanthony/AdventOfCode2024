@@ -13,7 +13,7 @@ internal class Program
         var lines = File.ReadAllLines(fileName);
 
         Map map = new Map(lines);
-        
+
         var areas = GetAllAreas(map);
 
         var totalCost = 0;
@@ -32,7 +32,7 @@ internal class Program
             {
                 linesCount += GetHorizontalLinesCount(area, y, width);
             }
-            
+
             var areaSize = area.Count;
             totalCost += areaSize * linesCount;
         }
@@ -49,7 +49,7 @@ internal class Program
         {
             for (int x = 0; x < map.Width; x++)
             {
-                var point = new Point(x,y);
+                var point = new Point(x, y);
                 if (processedPoints.Contains(point))
                     continue;
                 var areaPoints = new List<Point>();
@@ -80,10 +80,10 @@ internal class Program
         var type = map[x, y];
         var sides = new List<Sides>();
         if (x > 0 && map[x - 1, y] == type) sides.Add(Sides.Left);
-        if (x < width-1 && map[x + 1, y] == type) sides.Add(Sides.Right);
+        if (x < width - 1 && map[x + 1, y] == type) sides.Add(Sides.Right);
 
         if (y > 0 && map[x, y - 1] == type) sides.Add(Sides.Top);
-        if (y < height-1 && map[x, y + 1] == type) sides.Add(Sides.Bottom);
+        if (y < height - 1 && map[x, y + 1] == type) sides.Add(Sides.Bottom);
 
         return sides.ToArray();
     }
@@ -139,37 +139,39 @@ internal class Program
                 case Sides.Top:
                     GetArea(points, map, x, y - 1);
                     break;
+
                 case Sides.Right:
                     GetArea(points, map, x + 1, y);
                     break;
+
                 case Sides.Bottom:
                     GetArea(points, map, x, y + 1);
                     break;
+
                 case Sides.Left:
                     GetArea(points, map, x - 1, y);
                     break;
+
                 default:
                     throw new ArgumentOutOfRangeException();
             }
         }
     }
 
-
-    const int NoLine = 0;
-    const int LineA = 1;
-    const int LineB = 2;
-    const int Both = 3;
+    private const int NoLine = 0;
+    private const int LineA = 1;
+    private const int LineB = 2;
 
     private static int GetHorizontalLinesCount(List<Point> areaPoints, int lineNumber, int width)
     {
         var linesCount = 0;
-        
+
         var oldLineState = NoLine;
         for (int i = 0; i < width; i++)
         {
-            var topPoint = new Point(i, lineNumber-1);
+            var topPoint = new Point(i, lineNumber - 1);
             var bottomPoint = new Point(i, lineNumber);
-            
+
             var topExists = areaPoints.Contains(topPoint);
             var bottomExists = areaPoints.Contains(bottomPoint);
 
@@ -185,6 +187,7 @@ internal class Program
 
         return linesCount;
     }
+
     private static int GetVerticalLinesCount(List<Point> areaPoints, int columnNumber, int height)
     {
         var linesCount = 0;
@@ -209,26 +212,5 @@ internal class Program
         }
 
         return linesCount;
-    }
-
-
-
-    private static int GetPerimeter(List<Point> areaPoints)
-    {
-        var perimeterCounter = 0;
-
-        foreach (var point in areaPoints)
-        {
-            if (areaPoints.Contains(new Point(point.X, point.Y - 1)) == false)
-                perimeterCounter++;
-            if (areaPoints.Contains(new Point(point.X + 1, point.Y)) == false)
-                perimeterCounter++;
-            if (areaPoints.Contains(new Point(point.X, point.Y + 1)) == false)
-                perimeterCounter++;
-            if (areaPoints.Contains(new Point(point.X - 1, point.Y)) == false)
-                perimeterCounter++;
-        }
-
-        return perimeterCounter;
     }
 }
