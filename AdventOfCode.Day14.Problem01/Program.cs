@@ -11,6 +11,7 @@ internal class Program
     private static void Main()
     {
         const bool example = false;
+        const int secsCount = 100;
 
         string fileName;
         int mapWidth, mapHeight;
@@ -33,9 +34,6 @@ internal class Program
 
         var quadrants = new int[4];
 
-        var secsCount = 100;
-
-        var totalPrice = 0;
         foreach (var robot in robots)
         {
             var position = robot.GetCoordsAfterSecs(secsCount, mapWidth, mapHeight);
