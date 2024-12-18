@@ -1,6 +1,8 @@
-﻿namespace CommonStructsAndAlgos;
+﻿using System.Drawing;
 
-public class Map<T>
+namespace CommonStructsAndAlgos;
+
+public abstract class Map<T>
 {
     protected T[,] MapData = new T[0, 0];
 
@@ -8,6 +10,11 @@ public class Map<T>
     {
         get => MapData[x, y];
         set => MapData[x, y] = value;
+    }
+    public T this[Point point]
+    {
+        get => MapData[point.X, point.Y];
+        set => MapData[point.X, point.Y] = value;
     }
 
     public int Width => MapData.GetLength(0);
