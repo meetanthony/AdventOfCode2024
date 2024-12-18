@@ -1,54 +1,237 @@
-﻿--- Part Two ---
-Fortunately, the Elves are trying to order so much fence that they qualify for a bulk discount!
+﻿--- Day 15: Warehouse Woes ---
+You appear back inside your own mini submarine! Each Historian drives their mini submarine in a different direction; maybe the Chief has his own submarine down here somewhere as well?
 
-Under the bulk discount, instead of using the perimeter to calculate the price, you need to use the number of sides each region has. Each straight section of fence counts as a side, regardless of how long it is.
+You look up to see a vast school of lanternfish swimming past you. On closer inspection, they seem quite anxious, so you drive your mini submarine over to see if you can help.
 
-Consider this example again:
+Because lanternfish populations grow rapidly, they need a lot of food, and that food needs to be stored somewhere. That's why these lanternfish have built elaborate warehouse complexes operated by robots!
 
-AAAA
-BBCD
-BBCC
-EEEC
-The region containing type A plants has 4 sides, as does each of the regions containing plants of type B, D, and E. However, the more complex region containing the plants of type C has 8 sides!
+These lanternfish seem so anxious because they have lost control of the robot that operates one of their most important warehouses! It is currently running amok, pushing around boxes in the warehouse with no regard for lanternfish logistics or lanternfish inventory management strategies.
 
-Using the new method of calculating the per-region price by multiplying the region's area by its number of sides, regions A through E have prices 16, 16, 32, 4, and 12, respectively, for a total price of 80.
+Right now, none of the lanternfish are brave enough to swim up to an unpredictable robot so they could shut it off. However, if you could anticipate the robot's movements, maybe they could find a safe option.
 
-The second example above (full of type X and O plants) would have a total price of 436.
+The lanternfish already have a map of the warehouse and a list of movements the robot will attempt to make (your puzzle input). The problem is that the movements will sometimes fail as boxes are shifted around, making the actual movements of the robot difficult to predict.
 
-Here's a map that includes an E-shaped region full of type E plants:
+For example:
 
-EEEEE
-EXXXX
-EEEEE
-EXXXX
-EEEEE
-The E-shaped region has an area of 17 and 12 sides for a price of 204. Including the two regions full of type X plants, this map has a total price of 236.
+##########
+#..O..O.O#
+#......O.#
+#.OO..O.O#
+#..O@..O.#
+#O#..O...#
+#O..O..O.#
+#.OO.O.OO#
+#....O...#
+##########
 
-This map has a total price of 368:
+<vv>^<v^>v>^vv^v>v<>v^v<v<^vv<<<^><<><>>v<vvv<>^v^>^<<<><<v<<<v^vv^v>^
+vvv<<^>^v^^><<>>><>^<<><^vv^^<>vvv<>><^^v>^>vv<>v<<<<v<^v>^<^^>>>^<v<v
+><>vv>v^v^<>><>>>><^^>vv>v<^^^>>v^v^<^^>v^^>v^<^v>v<>>v^v^<v>v^^<^^vv<
+<<v<^>>^^^^>>>v^<>vvv^><v<<<>^^^vv^<vvv>^>v<^^^^v<>^>vvvv><>>v^<<^^^^^
+^><^><>>><>^^<<^^v>>><^<v>^<vv>>v>>>^v><>^v><<<<v>>v<v<v>vvv>^<><<>^><
+^>><>^v<><^vvv<^^<><v<<<<<><^v<<<><<<^^<v<^^^><^>>^<v^><<<^>>^v<v^v<v^
+>^>>^v>vv>^<<^v<>><<><<v<<v><>v<^vv<<<>^^v^>^^>>><<^v>>v^v><^^>>^<>vv^
+<><^^>^^^<><vvvvv^v<v<<>^v<v>v<<^><<><<><<<^^<<<^<<>><<><^^^>^^<>^>v<>
+^^>vv<^v^v<vv>^<><v<^v>^^^>>>^^vvv^>vvv<>>>^<^>>>>>^<<^v>^vvv<>^<><<v>
+v^^>>><<^^<>>^v^<v^vv<>v^<<>^<^v^v><^<<<><<^<v><v<>vv>>v><v^<vv<>v^<<^
+As the robot (@) attempts to move, if there are any boxes (O) in the way, the robot will also attempt to push those boxes. However, if this action would cause the robot or a box to move into a wall (#), nothing moves instead, including the robot. The initial positions of these are shown on the map at the top of the document the lanternfish gave you.
 
-AAAAAA
-AAABBA
-AAABBA
-ABBAAA
-ABBAAA
-AAAAAA
-It includes two regions full of type B plants (each with 4 sides) and a single region full of type A plants (with 4 sides on the outside and 8 more sides on the inside, a total of 12 sides). Be especially careful when counting the fence around regions like the one full of type A plants; in particular, each section of fence has an in-side and an out-side, so the fence does not connect across the middle of the region (where the two B regions touch diagonally). (The Elves would have used the Möbius Fencing Company instead, but their contract terms were too one-sided.)
+The rest of the document describes the moves (^ for up, v for down, < for left, > for right) that the robot will attempt to make, in order. (The moves form a single giant sequence; they are broken into multiple lines just to make copy-pasting easier. Newlines within the move sequence should be ignored.)
 
-The larger example from before now has the following updated prices:
+Here is a smaller example to get started:
 
-A region of R plants with price 12 * 10 = 120.
-A region of I plants with price 4 * 4 = 16.
-A region of C plants with price 14 * 22 = 308.
-A region of F plants with price 10 * 12 = 120.
-A region of V plants with price 13 * 10 = 130.
-A region of J plants with price 11 * 12 = 132.
-A region of C plants with price 1 * 4 = 4.
-A region of E plants with price 13 * 8 = 104.
-A region of I plants with price 14 * 16 = 224.
-A region of M plants with price 5 * 6 = 30.
-A region of S plants with price 3 * 6 = 18.
-Adding these together produces its new total price of 1206.
+########
+#..O.O.#
+##@.O..#
+#...O..#
+#.#.O..#
+#...O..#
+#......#
+########
 
-What is the new total price of fencing all regions on your map?
+<^^>>>vv<v>>v<<
+Were the robot to attempt the given sequence of moves, it would push around the boxes as follows:
 
-Your puzzle answer was 886364.
+Initial state:
+########
+#..O.O.#
+##@.O..#
+#...O..#
+#.#.O..#
+#...O..#
+#......#
+########
+
+Move <:
+########
+#..O.O.#
+##@.O..#
+#...O..#
+#.#.O..#
+#...O..#
+#......#
+########
+
+Move ^:
+########
+#.@O.O.#
+##..O..#
+#...O..#
+#.#.O..#
+#...O..#
+#......#
+########
+
+Move ^:
+########
+#.@O.O.#
+##..O..#
+#...O..#
+#.#.O..#
+#...O..#
+#......#
+########
+
+Move >:
+########
+#..@OO.#
+##..O..#
+#...O..#
+#.#.O..#
+#...O..#
+#......#
+########
+
+Move >:
+########
+#...@OO#
+##..O..#
+#...O..#
+#.#.O..#
+#...O..#
+#......#
+########
+
+Move >:
+########
+#...@OO#
+##..O..#
+#...O..#
+#.#.O..#
+#...O..#
+#......#
+########
+
+Move v:
+########
+#....OO#
+##..@..#
+#...O..#
+#.#.O..#
+#...O..#
+#...O..#
+########
+
+Move v:
+########
+#....OO#
+##..@..#
+#...O..#
+#.#.O..#
+#...O..#
+#...O..#
+########
+
+Move <:
+########
+#....OO#
+##.@...#
+#...O..#
+#.#.O..#
+#...O..#
+#...O..#
+########
+
+Move v:
+########
+#....OO#
+##.....#
+#..@O..#
+#.#.O..#
+#...O..#
+#...O..#
+########
+
+Move >:
+########
+#....OO#
+##.....#
+#...@O.#
+#.#.O..#
+#...O..#
+#...O..#
+########
+
+Move >:
+########
+#....OO#
+##.....#
+#....@O#
+#.#.O..#
+#...O..#
+#...O..#
+########
+
+Move v:
+########
+#....OO#
+##.....#
+#.....O#
+#.#.O@.#
+#...O..#
+#...O..#
+########
+
+Move <:
+########
+#....OO#
+##.....#
+#.....O#
+#.#O@..#
+#...O..#
+#...O..#
+########
+
+Move <:
+########
+#....OO#
+##.....#
+#.....O#
+#.#O@..#
+#...O..#
+#...O..#
+########
+The larger example has many more moves; after the robot has finished those moves, the warehouse would look like this:
+
+##########
+#.O.O.OOO#
+#........#
+#OO......#
+#OO@.....#
+#O#.....O#
+#O.....OO#
+#O.....OO#
+#OO....OO#
+##########
+The lanternfish use their own custom Goods Positioning System (GPS for short) to track the locations of the boxes. The GPS coordinate of a box is equal to 100 times its distance from the top edge of the map plus its distance from the left edge of the map. (This process does not stop at wall tiles; measure all the way to the edges of the map.)
+
+So, the box shown below has a distance of 1 from the top edge of the map and 4 from the left edge of the map, resulting in a GPS coordinate of 100 * 1 + 4 = 104.
+
+#######
+#...O..
+#......
+The lanternfish would like to know the sum of all boxes' GPS coordinates after the robot finishes moving. In the larger example, the sum of all boxes' GPS coordinates is 10092. In the smaller example, the sum is 2028.
+
+Predict the motion of the robot and boxes in the warehouse. After the robot is finished moving, what is the sum of all boxes' GPS coordinates?
+
+Your puzzle answer was 1463512.
