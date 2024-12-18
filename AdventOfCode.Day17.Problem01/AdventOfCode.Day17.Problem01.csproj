@@ -5,10 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CommonStructsAndAlgos\CommonStructsAndAlgos.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="TestData\day17.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
